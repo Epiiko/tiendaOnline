@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <?php require 'base_de_datos.php' ?>
+</head>
+
+<body>
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $usuario = $_POST["usuario"];
+        $contrasena = $_POST["contrasena"];
+        //hemos traido las variables
+        $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+        $res = $conexion_usuarios->query($sql);
+        //buscamos al usuario con su nombre si devuelve 0 es false y no entra en el if
+        if ($res->num_rows === 0) {
+            //si no encuentra res
+            ?>
+            <div class="alert alert-danger">No existe el usuario</div>
+            <?php
+        } else {
+            //recorremos todas las filas si encuentra con fetch_assoc()
+            while ($fila = $res->fetch_assoc()) {
+                //sacamos el campo contrasena de la $filas (en este caso una porque el nombre es PK)
+                $pasword_cifrada = $fila["contrasena"];
+            }
+            //creamos un boolean con el return de esta funcion que nos compara contraseña incluso con los hash
+            $acceso_valido = password_verify($contrasena, $pasword_cifrada);
+            if ($acceso_valido) {
+                //si las contraseñas coinciden lo llevamos a la pagina de inicio y en $_sesion guardamos en el campo usuario el usuario de la sesion.
+                ?>
+                <div class="alert alert-success">Bienvenido a la pagina</div>  
+                <?php
+                session_start();
+                header('location: principal.php');
+                $_SESSION["usuario"]=$usuario;
+            } else {
+                //si no coinciden las pass damos la notificacion
+                ?>
+                <div class="alert alert-danger">No coinciden las contraseñas</div>
+                <?php
+            }
+        }
+    }
+    ?>
+    <div class="container">
+        <h1>LogIn</h1>
+        <form action="" method="post">
+            <div class="mb-3">
+                <label class="form-label">Usuario: </label>
+                <input class="form-control" type="text" name="usuario">
+
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contraseña: </label>
+                <input class="form-control" type="password" name="contrasena">
+
+            </div>
+            <input class="btn btn-primary" type="submit" value="LogIn">
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
