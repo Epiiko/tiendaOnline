@@ -16,7 +16,7 @@
         $contrasena = $_POST["contrasena"];
         //hemos traido las variables
         $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-        $res = $conexion_usuarios->query($sql);
+        $res = $conexion->query($sql);
         //buscamos al usuario con su nombre si devuelve 0 es false y no entra en el if
         if ($res->num_rows === 0) {
             //si no encuentra res
