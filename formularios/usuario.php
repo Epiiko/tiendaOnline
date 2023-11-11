@@ -63,7 +63,8 @@
             }
              //----------------------------Si todo ok a bdd-------------------------------------------
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
-                $sql = "INSERT INTO productos VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
+                require '../funciones/base_de_datos.php';
+                $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
                 $conexion->query($sql);
             }
         }

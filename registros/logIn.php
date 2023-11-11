@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <?php require 'base_de_datos.php' ?>
+    <?php require '../funciones/base_de_datos.php' ?>
 </head>
 
 <body>
@@ -16,8 +16,8 @@
         $contrasena = $_POST["contrasena"];
         //hemos traido las variables
         $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-        $res = $conexion_usuarios->query($sql);
-        //buscamos al usuario con su nombre si devuelve 0 es false y no entra en el if
+        $res = $conexion->query($sql);
+        //buscamos al usuario con su nombre si devuelve 0 es false y si no entra en el if
         if ($res->num_rows === 0) {
             //si no encuentra res
             ?>
@@ -37,7 +37,7 @@
                 <div class="alert alert-success">Bienvenido a la pagina</div>  
                 <?php
                 session_start();
-                header('location: principal.php');
+                header('location: ../principal.php');
                 $_SESSION["usuario"]=$usuario;
             } else {
                 //si no coinciden las pass damos la notificacion

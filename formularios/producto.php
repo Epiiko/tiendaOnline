@@ -91,7 +91,7 @@
             $ruta_imagen = $_FILES["imagen"]["tmp_name"];
             $nombre_imagen = $_FILES["imagen"]["name"];
             if (strlen($ruta_imagen) > 0) {
-                $ruta_final = "imgs/" . $nombre_imagen;
+                $ruta_final = "./imgs/" . $nombre_imagen;
                 echo "imagen clonada";
                 move_uploaded_file($ruta_imagen, $ruta_final);
             } else {
@@ -99,6 +99,7 @@
             }
             //----------------------------si todo ok a bdd---------------------------------
             if (isset($nombre) && isset($precio) && isset($descripcion) && isset($cantidad) && isset($ruta_final)) {
+                require '../funciones/base_de_datos.php';
                 $sql = "INSERT INTO productos VALUES ('$nombre','$precio', '$descripcion', '$cantidad','$ruta_final')";
                 $conexion->query($sql);
             }
