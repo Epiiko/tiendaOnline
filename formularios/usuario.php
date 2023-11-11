@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
+    <title>Registro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <?php require 'base_de_datos.php'?>
+    <?php require '../funciones/base_de_datos.php'?>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                     } else {
                         $usuario = $temp_usuario;
                         $usuario = ucfirst($usuario);
-                        echo $usuario . "<br><br>";
+                    
                     }
                 }
             }
@@ -42,7 +42,7 @@
                 } else {
 
                     $contrasena = password_hash($temp_contrasena, PASSWORD_DEFAULT);
-                    echo $temp_contrasena . "<br> Hash: " . $contrasena;
+                   
                 }
             
             }
@@ -59,7 +59,7 @@
                     $err_fechNac = "La edad debe de comprender entre 12 y 120 años";
                 } else {
                     $fecha_nacimiento = $temp_fechaNac;
-                    echo $fecha_nacimiento;
+                  
                 }
             }
              //----------------------------Si todo ok a bdd-------------------------------------------
@@ -67,6 +67,7 @@
                 require '../funciones/base_de_datos.php';
                 $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
                 $conexion->query($sql);
+                header("Location ../registros/logIn.php");
             }
         }
     }

@@ -7,7 +7,7 @@
     <title>Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <?php require 'base_de_datos.php'?>
+    <?php require '../funciones/base_de_datos.php'?>
 
 </head>
 
@@ -92,7 +92,7 @@
             $ruta_imagen = $_FILES["imagen"]["tmp_name"];
             $nombre_imagen = $_FILES["imagen"]["name"];
             if (strlen($ruta_imagen) > 0) {
-                $ruta_final = "./imgs/" . $nombre_imagen;
+                $ruta_final = "../imgs/" . $nombre_imagen;
                 echo "imagen clonada";
                 move_uploaded_file($ruta_imagen, $ruta_final);
             } else {
@@ -101,8 +101,10 @@
             //----------------------------si todo ok a bdd---------------------------------
             if (isset($nombre) && isset($precio) && isset($descripcion) && isset($cantidad) && isset($ruta_final)) {
                 require '../funciones/base_de_datos.php';
-                $sql = "INSERT INTO productos (nombreProductos, precio, descripcion,cantidad,rutaImagen) VALUES ('$nombre','$precio', '$descripcion', '$cantidad','$ruta_final')";
+                $sql = "INSERT INTO productos (nombreProductos, precio, descripcion,cantidad,imagen) VALUES ('$nombre','$precio', '$descripcion', '$cantidad','$ruta_final')";
                 $conexion->query($sql);
+                $enviado="El producto se ha subido correctamente";
+                header("Location: ../principal.php");
             }
         }
     }
@@ -157,6 +159,9 @@
                 <br><br>
                 <input type="hidden" name="action" value="productos">
                 <input type="submit" value="Productos">
+                <?php
+                if(isset($enviado))echo $enviado;
+                ?>
             </form>
         </fieldset>
     </div>
