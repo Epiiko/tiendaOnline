@@ -10,6 +10,19 @@
 </head>
 
 <body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="../principal.php">Good4Pay</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                        <a class="nav-item nav-link" href="../formularios/usuario.php">¿No eres usuario? Registrarse</a>
+                </div>
+            </div>
+        </nav>
+    </header>
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $usuario = $_POST["usuario"];
@@ -20,7 +33,7 @@
         //buscamos al usuario con su nombre si devuelve 0 es false y si no entra en el if
         if ($res->num_rows === 0) {
             //si no encuentra res
-            ?>
+    ?>
             <div class="alert alert-danger">No existe el usuario</div>
             <?php
         } else {
@@ -28,22 +41,24 @@
             while ($fila = $res->fetch_assoc()) {
                 //sacamos el campo contrasena de la $filas (en este caso una porque el nombre es PK)
                 $pasword_cifrada = $fila["contrasena"];
+                $rol=$fila["rol"];
             }
             //creamos un boolean con el return de esta funcion que nos compara contraseña incluso con los hash
             $acceso_valido = password_verify($contrasena, $pasword_cifrada);
             if ($acceso_valido) {
                 //si las contraseñas coinciden lo llevamos a la pagina de inicio y en $_sesion guardamos en el campo usuario el usuario de la sesion.
-                ?>
-                <div class="alert alert-success">Bienvenido a la pagina</div>  
-                <?php
+            ?>
+                <div class="alert alert-success">Bienvenido a la pagina</div>
+            <?php
                 session_start();
-                header('location: ../principal.php');
-                $_SESSION["usuario"]=$usuario;
+                $_SESSION["usuario"] = $usuario;
+                $_SESSION["rol"]=$rol;
+                 header('location: ../principal.php');
             } else {
                 //si no coinciden las pass damos la notificacion
-                ?>
+            ?>
                 <div class="alert alert-danger">No coinciden las contraseñas</div>
-                <?php
+    <?php
             }
         }
     }

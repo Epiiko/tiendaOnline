@@ -31,10 +31,11 @@
                     } else {
                     ?>
                         <a class="nav-item nav-link" href="registros/logOut.php">LogOut</a>
-                        <a class="nav-item nav-link" href="formularios/producto.php">Añadir producto</a>
-                    <?php
+                        <?php
+                        if ($_SESSION["rol"] == "admin") { ?>
+                            <a class="nav-item nav-link" href="formularios/producto.php">Añadir producto</a>
+                    <?php }
                     }
-
                     ?>
                 </div>
             </div>
@@ -69,13 +70,12 @@
                     <?php
                     $sql = "SELECT * FROM productos";
                     $res = $conexion->query($sql);
-                    while ($fila = $res->fetch_assoc()) {
-                        echo "<tr>
-                    <td>" . $fila["idProducto"] . "</td>
-                    <td>" . $fila["nombreProductos"] . "</td>
-                    <td>" . $fila["precio"] . "</td>
-                    <td>" . $fila["idProducto"] . "</td>
-                    <td>" . $fila["cantidad"] . "</td>";
+                    while ($fila = $res->fetch_assoc()) { ?>
+                    <tr>
+                    <td> <?php echo $fila["idProducto"]?> </td>
+                    <td> <?php echo $fila["nombreProductos"]?> </td>
+                    <td> <?php echo $fila["precio"]?> </td>
+                    <td> <?php echo $fila["cantidad"]?> </td>
                     ?> <td>
                             <img src="<?php $img = explode("/", $fila["imagen"]);
                                         echo $img[1] . "/" . $img[2] ?>" alt="<?php $img = explode("/", $fila["imagen"]);

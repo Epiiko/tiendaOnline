@@ -11,6 +11,14 @@
 </head>
 
 <body>
+<header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="../principal.php">Good4Pay</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+    </header>
     <?php
     if (($_SERVER["REQUEST_METHOD"]) == "POST") {
         if ($_POST["action"] == "usuarios") {
@@ -65,8 +73,10 @@
              //----------------------------Si todo ok a bdd-------------------------------------------
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../funciones/base_de_datos.php';
-                $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
+                $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
+                $sql2= "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
                 $conexion->query($sql);
+                $conexion->query($sql2);
                 header("Location ../registros/logIn.php");
             }
         }
@@ -74,9 +84,9 @@
     ?>
     <div class="form-group mt-5">
         <fieldset class="container form-group">
-            <legend>usuario</legend>
+            <legend>Registro</legend>
             <form action="" method="POST" class="form-group">
-                <label for="name">Ususario</label>
+                <label for="name">Nombre usuario: </label>
                 <input type="text" name="user">
                 <?php
                 if (isset($err_usuario)) {
@@ -85,15 +95,15 @@
                 }
                 ?>
                 <br><br>
-                <label for="name">contrasena</label>
-                <input type="text" name="pass">
+                <label for="name">Contraseña: </label>
+                <input type="password" name="pass">
                 <?php
                 if (isset($err_contrasena)) {
                     echo "$err_contrasena";
                 }
                 ?>
                 <br><br>
-                <label for="name">fechaNacimiento</label>
+                <label for="name">Fecha de nacimiento: </label>
                 <input type="date" name="date">
                 <?php
                 if (isset($err_fechNac)) {

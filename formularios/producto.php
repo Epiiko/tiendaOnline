@@ -7,11 +7,26 @@
     <title>Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <?php require '../funciones/base_de_datos.php'?>
+    <?php require '../funciones/base_de_datos.php' ?>
 
 </head>
 
 <body>
+    <?php
+    session_start();
+    if($_SESSION["rol"]!=["admin"]){
+        header("Location: ../principal.php");
+    } else {
+    }
+    ?>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="../principal.php">Good4Pay</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+    </header>-
     <?php // ----------------------------Validacion Producto -------------------
     function depurar($entrada)
     {
@@ -103,7 +118,7 @@
                 require '../funciones/base_de_datos.php';
                 $sql = "INSERT INTO productos (nombreProductos, precio, descripcion,cantidad,imagen) VALUES ('$nombre','$precio', '$descripcion', '$cantidad','$ruta_final')";
                 $conexion->query($sql);
-                $enviado="El producto se ha subido correctamente";
+                $enviado = "El producto se ha subido correctamente";
                 header("Location: ../principal.php");
             }
         }
@@ -160,7 +175,7 @@
                 <input type="hidden" name="action" value="productos">
                 <input type="submit" value="Productos">
                 <?php
-                if(isset($enviado))echo $enviado;
+                if (isset($enviado)) echo $enviado;
                 ?>
             </form>
         </fieldset>
