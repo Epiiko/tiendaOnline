@@ -26,7 +26,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
         </nav>
-    </header>-
+    </header>
     <?php // ----------------------------Validacion Producto -------------------
     function depurar($entrada)
     {
