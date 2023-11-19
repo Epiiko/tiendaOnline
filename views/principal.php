@@ -63,9 +63,8 @@
     <?php
 
     ?>
-    <div class="container">
-        <h1 class="mt-3"><img src="imgs/logo.png" alt="" height="40px">Good4Game</h1>
-
+    <div class="container" align="center">
+        <h1 class="mt-3"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
     </div>
     <div class="container mt-5">
         <?php if ($usuario != "invitado") {
@@ -135,6 +134,14 @@
     </div>
     <?php
 
+        }else{
+            ?>
+            <div class="container" align="center">
+                <h1>Bienvenido a <img src="imgs/logo.png" alt="" height="50px">Good4Game</h1>
+                <p>Para poder disfrutar de nuestra variedad de productos y servicios debe de ser usuario registrado de nuestra pagina</p>
+                <p>puede o bien <a href="usuario.php">registrarse</a> o bien <a href="logIn.php">iniciar sesion</a> como usuario de nuestra web</p>
+            </div>
+            <?php
         }
         //si se pulsa el boton añadir añadimos una vez el producto en la cesta con la cantidad indicada en el select;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
