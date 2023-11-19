@@ -9,9 +9,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <?php require '../util/base_de_datos.php';
     require '../util/productoObj.php'; ?>
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
+    <video src="imgs/fondo.mp4" autoplay loop muted></video>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
@@ -67,8 +70,8 @@
     <div class="container mt-5">
         <?php if ($usuario != "invitado") {
         ?>
-            <h1>Tabla productos</h1>
-            <table class="table table-hover table-dark">
+            <h1 align="center">Tabla productos</h1>
+            <table class="table table-hover table-dark ">
 
                 <thead>
                     <tr>
@@ -100,28 +103,28 @@
                             <?php
                             // if (intval($producto->cantidad) <= 0) {
                             ?>
-                                <td>
-                                    <form action="" method="POST">
-                                        <!-- pasamos los valores con botones hidden -->
-                                        <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
-                                        <input type="hidden" name="stockProducto" value="<?php echo $producto->cantidad ?>">
-                                        <input type="submit" name="action" value="Añadir" class="btn btn-light">
+                            <td>
+                                <form action="" method="POST">
+                                    <!-- pasamos los valores con botones hidden -->
+                                    <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
+                                    <input type="hidden" name="stockProducto" value="<?php echo $producto->cantidad ?>">
+                                    <input type="submit" name="action" value="Añadir" class="btn btn-light">
 
-                                        <select name="unidades" id="" max=5>
-                                            <?php
-                                            for ($i = 1; $i <= intval($producto->cantidad); $i++) {
-                                            ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </form>
-                                </td>
+                                    <select name="unidades" id="" max=5>
+                                        <?php
+                                        for ($i = 1; $i <= intval($producto->cantidad); $i++) {
+                                        ?>
+                                            <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </form>
+                            </td>
                             <?php
                             // } else {
                             ?>
-                                <!-- <td>Producto fuera de stock</td> -->
+                            <!-- <td>Producto fuera de stock</td> -->
                             <?php
                             // }
                             ?>
