@@ -95,13 +95,13 @@
                                     <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
                                     <input type="hidden" name="stockProducto" value="<?php echo $producto->cantidad ?>">
                                     <input type="submit" name="action" value="Añadir" class="btn btn-light">
-                                    <select name="unidades" id="">
+                                    <select name="unidades" id="" max=5>
                                         <?php
-                                            for($i=1;$i<=intval($producto->cantidad);$i++){
-                                                ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                                                <?php
-                                            } 
+                                        for ($i = 1; $i <= intval($producto->cantidad) && $i<=5; $i++) {
+                                        ?>
+                                            <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                        <?php
+                                        }
                                         ?>
                                     </select>
                                 </form>
@@ -114,21 +114,36 @@
 <?php
 
         }
-//si se pulsa el boton añadir añadimos una vez el producto en la cesta;
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if ($_POST["action"] == "Añadir") {
-        $usuario = $_SESSION["usuario"];
-        $idProducto=$_POST["idProducto"];
-        $stockProducto=$_POST["stockProducto"];
-        //sacamos el id de la cesta del usuario en sesion
-        $sqlCesta = "SELECT * FROM Cestas where usuario= '$usuario'";
-        $idCestaUsuario = $conexion->query($sqlCesta)->fetch_assoc()["idCesta"];
-        //en la tabla productosCestas introducimos los valores de idProducto e idCesta.
-        $sqlProductoCesta = "INSERT INTO productoscestas (idProducto , idCesta) values ('$idProducto' , '$idCestaUsuario')";
-        //
-        $conexion->query($sqlProductoCesta);
-    }
-}
+        //si se pulsa el boton añadir añadimos una vez el producto en la cesta con la cantidad indicada en el select;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($_POST["action"] == "Añadir") {
+                $usuario = $_SESSION["usuario"];
+                $idProducto = $_POST["idProducto"];
+                $unidades = $_POST["unidades"];
+                //sacamos el id de la cesta del usuario en sesion
+                $sqlCesta = "SELECT * FROM Cestas where usuario= '$usuario'";
+                $idCestaUsuario = $conexion->query($sqlCesta)->fetch_assoc()["idCesta"];
+                echo $idProducto . " , " . $idCestaUsuario . " , " . $unidades;
+                //comprobamos que en la base de datos no haya ese producto ya en esa cesta
+                $res = $conexion->query("SELECT * FROM productoscestas");
+                $existe = false;
+                while ($fila = $res->fetch_assoc()) {
+                    //en caso de encontrarlo existe pasa a ser true y no lo añadimos a la bdd si no lo modificamos
+                    if ($fila["idCesta"] == $idCestaUsuario && $fila["idProducto"] == $idProducto) {
+                        $conexion->query("UPDATE productoscestas SET cantidad = '$unidades' WHERE (idProducto = '$idProducto') and (idCesta = '$idCestaUsuario');");
+                        //levantamos flag
+                        $existe = true;
+                    }
+                }
+                //si no existe el producto en la cesta, en la tabla productosCestas introducimos los valores de idProducto e idCesta y la cantidad a añadir.
+                if (!$existe) {
+                    $sqlProductoCesta = "INSERT INTO productoscestas (idProducto , idCesta, cantidad) values ('$idProducto' , '$idCestaUsuario', '$unidades')";
+                    $conexion->query($sqlProductoCesta);
+                }
+                //
+
+            }
+        }
 ?>
 </body>
 
