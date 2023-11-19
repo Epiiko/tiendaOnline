@@ -7,13 +7,13 @@
     <title>Registro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <?php require '../util/base_de_datos.php'?>
+    <?php require '../util/base_de_datos.php' ?>
 </head>
 
 <body>
-<header>
+    <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="principal.php">Good4Pay</a>
+            <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -24,7 +24,7 @@
         if ($_POST["action"] == "usuarios") {
             //----------------------------Usuario------------------------------------------- 
             $temp_usuario = $_POST["user"];
-             $patern_usuario = "/^[a-zA-Z_]+$/";
+            $patern_usuario = "/^[a-zA-Z_]+$/";
             if (strlen($temp_usuario) <= 0) {
                 $err_usuario = "El nombre debe de estar relleno";
             } else {
@@ -36,11 +36,10 @@
                     } else {
                         $usuario = $temp_usuario;
                         $usuario = ucfirst($usuario);
-                    
                     }
                 }
             }
-             //----------------------------Contraseña-------------------------------------------
+            //----------------------------Contraseña-------------------------------------------
             $temp_contrasena = $_POST["pass"];
             if (strlen($temp_contrasena) <= 0) {
                 $err_contrasena = "La contraseña es obligatoria";
@@ -50,11 +49,9 @@
                 } else {
 
                     $contrasena = password_hash($temp_contrasena, PASSWORD_DEFAULT);
-                   
                 }
-            
             }
-             //----------------------------Nacimiento-------------------------------------------
+            //----------------------------Nacimiento-------------------------------------------
             $temp_fechaNac = $_POST["date"];
             $fecha_actual = new DateTime();
             if (strlen(($temp_fechaNac)) <= 0) {
@@ -67,14 +64,13 @@
                     $err_fechNac = "La edad debe de comprender entre 12 y 120 años";
                 } else {
                     $fecha_nacimiento = $temp_fechaNac;
-                  
                 }
             }
-             //----------------------------Si todo ok a bdd-------------------------------------------
+            //----------------------------Si todo ok a bdd-------------------------------------------
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
                 $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimiento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
-                $sql2= "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
+                $sql2 = "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
                 $conexion->query($sql);
                 $conexion->query($sql2);
                 header("Location: logIn.php");

@@ -14,15 +14,19 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="principal.php">Good4Pay</a>
+            <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-
                     <?php
                     session_start();
+                    $usuario = $_SESSION["usuario"];
+                    ?>
+                    <a class="nav-item nav-link" href="#">Bienvenid@ <?php echo $usuario ?></a>
+                    <?php
+
                     //comprobamos si usuario esta vacio si es asi lo iniciamos como invitado
                     if ($_SESSION["usuario"] == '') {
                         $_SESSION["usuario"] = "invitado";
@@ -38,24 +42,27 @@
                     <?php
                     } else {
                     ?>
-                        <a class="nav-item nav-link" href="logOut.php">LogOut</a>
+                        <a class="nav-item nav-link" href="cesta.php">Cesta</a>
                         <?php
                         //si no es cliente y es admin muestra mas cosas
                         if ($_SESSION["rol"] == "admin") { ?>
                             <a class="nav-item nav-link" href="producto.php">Añadir producto</a>
-                    <?php }
+                        <?php } ?>
+                        <a class="nav-item nav-link" href="logOut.php">LogOut</a>
+                    <?php
                     }
                     ?>
+
                 </div>
             </div>
         </nav>
     </header>
     <?php
-    $usuario = $_SESSION["usuario"];
+
     ?>
     <div class="container">
-        <h1>Pagina Principal</h1>
-        <h2>Bienvenid@ <?php echo $usuario ?></h2>
+        <h1 class="mt-3"><img src="imgs/logo.png" alt="" height="40px">Good4Game</h1>
+
     </div>
     <div class="container mt-5">
         <?php if ($usuario != "invitado") {
@@ -80,8 +87,8 @@
                     $res = $conexion->query($sql);
                     while ($fila = $res->fetch_assoc()) { ?>
                         <?php
+                        //creamos un producto con los campos de la tabla recorriendola con fetchassoc()
                         $producto = new Producto($fila["idProducto"], $fila["nombreProductos"], $fila["precio"], $fila["descripcion"], $fila["cantidad"], $fila["imagen"]);
-
                         ?>
                         <tr>
                             <td><?php echo $producto->idProducto ?></td>
@@ -90,28 +97,40 @@
                             <td><?php echo $producto->descripcion ?></td>
                             <td><?php echo $producto->cantidad ?></td>
                             <td><img src="<?php echo $producto->rutaImagen ?>" alt="<?php echo $producto->nombreproductos ?>" width="50px"></td>
-                            <td>
-                                <form action="" method="POST">
-                                    <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
-                                    <input type="hidden" name="stockProducto" value="<?php echo $producto->cantidad ?>">
-                                    <input type="submit" name="action" value="Añadir" class="btn btn-light">
-                                    <select name="unidades" id="" max=5>
-                                        <?php
-                                        for ($i = 1; $i <= intval($producto->cantidad) ; $i++) {
-                                        ?>
-                                            <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </form>
-                            </td>
+                            <?php
+                            // if (intval($producto->cantidad) <= 0) {
+                            ?>
+                                <td>
+                                    <form action="" method="POST">
+                                        <!-- pasamos los valores con botones hidden -->
+                                        <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
+                                        <input type="hidden" name="stockProducto" value="<?php echo $producto->cantidad ?>">
+                                        <input type="submit" name="action" value="Añadir" class="btn btn-light">
+
+                                        <select name="unidades" id="" max=5>
+                                            <?php
+                                            for ($i = 1; $i <= intval($producto->cantidad); $i++) {
+                                            ?>
+                                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </form>
+                                </td>
+                            <?php
+                            // } else {
+                            ?>
+                                <!-- <td>Producto fuera de stock</td> -->
+                            <?php
+                            // }
+                            ?>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
     </div>
-<?php
+    <?php
 
         }
         //si se pulsa el boton añadir añadimos una vez el producto en la cesta con la cantidad indicada en el select;
@@ -123,7 +142,6 @@
                 //sacamos el id de la cesta del usuario en sesion
                 $sqlCesta = "SELECT * FROM Cestas where usuario= '$usuario'";
                 $idCestaUsuario = $conexion->query($sqlCesta)->fetch_assoc()["idCesta"];
-                echo $idProducto . " , " . $idCestaUsuario . " , " . $unidades;
                 //comprobamos que en la base de datos no haya ese producto ya en esa cesta
                 $res = $conexion->query("SELECT * FROM productoscestas");
                 $existe = false;
@@ -133,15 +151,19 @@
                         $conexion->query("UPDATE productoscestas SET cantidad = '$unidades' WHERE (idProducto = '$idProducto') and (idCesta = '$idCestaUsuario');");
                         //levantamos flag
                         $existe = true;
+    ?>
+                <div class="alert alert-warning container">Cantidad modificada en el carrito</div>
+            <?php
                     }
                 }
                 //si no existe el producto en la cesta, en la tabla productosCestas introducimos los valores de idProducto e idCesta y la cantidad a añadir.
                 if (!$existe) {
                     $sqlProductoCesta = "INSERT INTO productoscestas (idProducto , idCesta, cantidad) values ('$idProducto' , '$idCestaUsuario', '$unidades')";
                     $conexion->query($sqlProductoCesta);
+            ?>
+            <div class="alert alert-success container">Producto introducido en la cesta</div>
+<?php
                 }
-                //
-
             }
         }
 ?>
