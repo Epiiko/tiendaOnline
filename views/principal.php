@@ -97,7 +97,7 @@
                                     <input type="submit" name="action" value="Añadir" class="btn btn-light">
                                     <select name="unidades" id="" max=5>
                                         <?php
-                                        for ($i = 1; $i <= intval($producto->cantidad) && $i<=5; $i++) {
+                                        for ($i = 1; $i <= intval($producto->cantidad) ; $i++) {
                                         ?>
                                             <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                         <?php
