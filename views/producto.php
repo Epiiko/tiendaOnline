@@ -114,7 +114,7 @@
             //----------------------------si todo ok a bdd---------------------------------
             if (isset($nombre) && isset($precio) && isset($descripcion) && isset($cantidad) && isset($ruta_final)) {
                 require '../util/base_de_datos.php';
-                $sql = "INSERT INTO productos (nombreProductos, precio, descripcion,cantidad,imagen) VALUES ('$nombre','$precio', '$descripcion', '$cantidad','$ruta_final')";
+                $sql = "INSERT INTO productos (nombreProductos, precio, descripcion, cantidad, imagen) VALUES ('$nombre','$precio', '$descripcion', '$cantidad','$ruta_final')";
                 $conexion->query($sql);
                 $enviado = "El producto se ha subido correctamente";
                 header("Location: principal.php");

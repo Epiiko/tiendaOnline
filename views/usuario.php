@@ -71,7 +71,7 @@
             //----------------------------Si todo ok a bdd-------------------------------------------
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
-                $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimiento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
+                $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
                 $sql2 = "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
                 $conexion->query($sql);
                 $conexion->query($sql2);
@@ -80,8 +80,8 @@
         }
     }
     ?>
-    <div class="form-group mt-5">
-        <fieldset class="container form-group bg-dark p-3">
+    <div class="form-group mt-5 registroUsuario">
+        <fieldset class="container form-group p-3">
             <legend>Registro</legend>
             <form action="" method="POST" class="form-group">
                 <label for="name">Nombre usuario: </label>
