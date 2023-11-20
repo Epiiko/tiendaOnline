@@ -31,7 +31,7 @@ if ($_SESSION["usuario"] == "invitado") {
         </nav>
     </header>
     <main>
-        <div class="container">
+        <div class="container divTablas">
             <h1 class="mt-5" align="center">Cesta de <?php echo $usuario ?></h1>
             <table class="table table-dark table-hover mt-5">
                 <thead>

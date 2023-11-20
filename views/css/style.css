@@ -10,3 +10,17 @@ video{
    transform: translateY(-50%) translateX(-50%);
    z-index: -100;
 }
+.divTablas{
+    width: 65%;
+}
+table{
+    text-align: center;
+}
+td{
+    vertical-align: middle;
+}
+select{
+    font-weight: bold;
+    font-size: 1rem;
+    
+}
