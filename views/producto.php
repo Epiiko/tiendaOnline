@@ -91,8 +91,8 @@
             if (strlen($cantidad_producto) <= 0) {
                 $err_producto_cantidad = "Minimo debe de añadirse un producto";
             } else {
-                if (((int)($cantidad_producto)) > 10) {
-                    $err_producto_cantidad = "No puedes introducir más de 10 productos";
+                if (((int)($cantidad_producto)) > 9999999) {
+                    $err_producto_cantidad = "No puedes introducir más de 9999999 productos";
                 } else {
                     if (!is_numeric($cantidad_producto)) {
                         $err_producto_cantidad = "Deja de intentar cositas";
@@ -104,12 +104,23 @@
             // -----------------------------------Foto---------------------------------
             $ruta_imagen = $_FILES["imagen"]["tmp_name"];
             $nombre_imagen = $_FILES["imagen"]["name"];
-            if (strlen($ruta_imagen) > 0) {
-                $ruta_final = "imgs/" . $nombre_imagen;
-                echo "imagen clonada";
-                move_uploaded_file($ruta_imagen, $ruta_final);
-            } else {
+            //nos lo trae en bytes y hay que pasarlo a MB
+            $peso_imagen = $_FILES["imagen"]["size"];
+            $peso_imagenMB = $peso_imagen / (1024 * 1024);
+            $patern_imagen = "/^(.*\.jpg)|(.*\.jpeg)|(.*\.png)$/";
+            if (strlen($ruta_imagen) <= 0) {
                 $err_imagen = "No se ha subido una foto de producto";
+            } else {
+                if (!preg_match($patern_imagen, $nombre_imagen)) {
+                    $err_imagen = "La foto ha de ser formato .png o .jpg o .jpeg";
+                } else {
+                    if ($peso_imagenMB > 1) {
+                        $err_imagen = "No puede tener un peso superior a 5MB";
+                    } else {
+                        $ruta_final = "imgs/" . $nombre_imagen;
+                        move_uploaded_file($ruta_imagen, $ruta_final);
+                    }
+                }
             }
             //----------------------------si todo ok a bdd---------------------------------
             if (isset($nombre) && isset($precio) && isset($descripcion) && isset($cantidad) && isset($ruta_final)) {

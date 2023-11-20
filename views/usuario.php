@@ -43,14 +43,18 @@
             }
             //----------------------------Contraseña-------------------------------------------
             $temp_contrasena = $_POST["pass"];
+            $patternContrasena = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,20}$/";
             if (strlen($temp_contrasena) <= 0) {
                 $err_contrasena = "La contraseña es obligatoria";
             } else {
-                if (strlen($temp_contrasena) > 255) {
-                    $err_contrasena = "La contraseña debe de ser menos de 255 caracteres";
+                if (strlen($temp_contrasena) < 8 || strlen($temp_contrasena) > 20) {
+                    $err_contrasena ="La contraseña debe tener mas de 8 y menos de 20 caracteres";
                 } else {
-
-                    $contrasena = password_hash($temp_contrasena, PASSWORD_DEFAULT);
+                    if (!preg_match($patternContrasena, $temp_contrasena)) {
+                        $err_contrasena = "La contraseña debe contenermínimo un carácter en minúscula, uno en mayúscula, un número y un carácter especial";
+                    } else {
+                        $contrasena = password_hash($temp_contrasena, PASSWORD_DEFAULT);
+                    }
                 }
             }
             //----------------------------Nacimiento-------------------------------------------
@@ -71,11 +75,23 @@
             //----------------------------Si todo ok a bdd-------------------------------------------
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
-                $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimiento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
-                $sql2 = "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
-                $conexion->query($sql);
-                $conexion->query($sql2);
-                header("Location: logIn.php");
+                $repetido = false;
+                while ($usuarios = $conexion->query("SELECT * FROM usuarios")->fetch_assoc()) {
+                    if ($usuarios["usuario"] == $usuario) {
+                        $repetido = true;
+                    }
+                }
+                if (!$repetido) {
+                    $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimiento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
+                    $sql2 = "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
+                    $conexion->query($sql);
+                    $conexion->query($sql2);
+                    header("Location: logIn.php");
+                } else {
+    ?>
+                    <div class="alert alert-danger container">El nombre de usuario ya ha sido escogido</div>
+    <?php
+                }
             }
         }
     }
