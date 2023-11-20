@@ -71,7 +71,7 @@
             //----------------------------Si todo ok a bdd-------------------------------------------
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
-                $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
+                $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimiento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
                 $sql2 = "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
                 $conexion->query($sql);
                 $conexion->query($sql2);

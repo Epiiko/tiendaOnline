@@ -63,6 +63,87 @@
         <div class="container" align="center">
             <h1 class="mt-3"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
         </div>
+        <?php
+        //si se pulsa el boton añadir añadimos una vez el producto en la cesta con la cantidad indicada en el select;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($_POST["action"] == "Añadir") {
+                $usuario = $_SESSION["usuario"];
+                $idProducto = $_POST["idProducto"];
+                //como el select puede no tener opciones por falta de producto en caso de que no este seteado lo inicializamos en 0
+                if (!isset($_POST["unidades"])) {
+                    $unidades = "0";
+                } else {
+                    $unidades = $_POST["unidades"];
+                }
+                $stock = $_POST["stockProducto"];
+                $precioProducto = $_POST["precio"];
+                //sacamos el id de la cesta del usuario en sesion
+                $sqlCesta = "SELECT * FROM Cestas where usuario= '$usuario'";
+                $idCestaUsuario = $conexion->query($sqlCesta)->fetch_assoc()["idCesta"];
+                //comprobamos que en la base de datos no haya ese producto ya en esa cesta para mostrar el mensaje distinto
+                $res = $conexion->query("SELECT * FROM productoscestas WHERE idProducto='$idProducto'");
+                //flag que controlara si ha sido encontrado
+                $existe = false;
+                while ($fila = $res->fetch_assoc()) {
+                    //en caso de encontrarlo existe pasa a ser true y no lo añadimos a la bdd si no lo sumamos a la cantidad 
+                    if ($fila["idCesta"] == $idCestaUsuario && $fila["idProducto"] == $idProducto) {
+                        if ($stock > 0) {
+                            $cantidadCesta = $fila["cantidad"] + $unidades;
+                            //si no supera con los nuevos elemento los 10 elementos en cesta
+                            if ($cantidadCesta <= 10) {
+                                $conexion->query("UPDATE productoscestas SET cantidad = '$cantidadCesta' WHERE (idProducto = '$idProducto') and (idCesta = '$idCestaUsuario');");
+                                //le restamos al stock las unidades al añadirlo a cesta
+                                $cantidadStock = $stock - $unidades;
+                                $conexion->query("UPDATE productos SET cantidad = '$cantidadStock' WHERE (idProducto = '$idProducto');");
+                                //seteamos el total de la cesta para ello primero sacamos el valor que tiene.
+                                $precioTotalActual = $conexion->query("SELECT * FROM Cestas WHERE idCesta='$idCestaUsuario'")->fetch_assoc()["precioTotal"];
+                                $precioTotalActual += ($precioProducto * $unidades);
+                                $conexion->query("UPDATE cestas SET precioTotal = '$precioTotalActual' WHERE (idCesta='$idCestaUsuario');");
+                                //levantamos flag
+                                $existe = true;
+                                //mostramos que ha sido modificada la cantidad en el carrito
+        ?>
+                                <div class="alert alert-warning container">Cantidad modificada en el carrito</div>
+                            <?php
+                            } else {
+                                //si existe y serian mas de 10 no lo deja y avisa
+                                $existe = true;
+                            ?>
+                                <div class="alert alert-warning container">No puedes tener mas de 10 productos en cesta</div>
+                            <?php
+                            }
+                        } else {
+                            //si el producto no tiene stock
+                            ?>
+                            <div class="alert alert-danger container">Producto agotado</div>
+                        <?php
+                        }
+                    }
+                }
+                //si no existe el producto en la cesta, en la tabla productosCestas introducimos los valores de idProducto e idCesta y la cantidad a añadir.
+                if (!$existe) {
+                    if ($stock > 0) {
+                        $sqlProductoCesta = "INSERT INTO productoscestas (idProducto , idCesta, cantidad) values ('$idProducto' , '$idCestaUsuario', '$unidades')";
+                        $conexion->query($sqlProductoCesta);
+                        //le restamos al stock las unidades al añadirlo a cesta
+                        $cantidadStock = $stock - $unidades;
+                        $conexion->query("UPDATE productos SET cantidad = '$cantidadStock' WHERE (idProducto = '$idProducto');");
+                        //seteamos el total de la cesta para ello primero sacamos el valor que tiene
+                        $precioTotalActual = $conexion->query("SELECT * FROM Cestas WHERE idCesta='$idCestaUsuario'")->fetch_assoc()["precioTotal"];
+                        $precioTotalActual += ($precioProducto * $unidades);
+                        $conexion->query("UPDATE cestas SET precioTotal = '$precioTotalActual' WHERE (idCesta='$idCestaUsuario');");
+                        ?>
+                        <div class="alert alert-success container">Producto introducido en la cesta</div>
+                    <?php
+                    } else {
+                    ?>
+                        <div class="alert alert-danger container">Producto agotado</div>
+        <?php
+                    }
+                }
+            }
+        }
+        ?>
         <div class="container mt-5 divTablas">
             <?php if ($usuario != "invitado") {
             ?>
@@ -97,13 +178,13 @@
                                 <td><?php echo $producto->cantidad ?></td>
                                 <td><img src="<?php echo $producto->rutaImagen ?>" alt="<?php echo $producto->nombreproductos ?>" width="50px"></td>
                                 <?php
-                                // if (intval($producto->cantidad) <= 0) {
                                 ?>
                                 <td>
                                     <form action="" method="POST">
                                         <!-- pasamos los valores con botones hidden -->
                                         <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
                                         <input type="hidden" name="stockProducto" value="<?php echo $producto->cantidad ?>">
+                                        <input type="hidden" name="precio" value="<?php echo $producto->precio ?>">
                                         <input type="submit" name="action" value="Añadir" class="btn btn-light">
 
                                         <select name="unidades" id="" max=5>
@@ -118,11 +199,8 @@
                                     </form>
                                 </td>
                                 <?php
-                                // } else {
                                 ?>
-                                <!-- <td>Producto fuera de stock</td> -->
                                 <?php
-                                // }
                                 ?>
                             </tr>
                         <?php } ?>
@@ -138,55 +216,7 @@
             <p>Para poder disfrutar de nuestra variedad de productos y servicios debe de ser usuario registrado de nuestra pagina</p>
             <p>puede o bien <a href="usuario.php">registrarse</a> o bien <a href="logIn.php">iniciar sesion</a> como usuario de nuestra web</p>
         </div>
-        <?php
-            }
-            //si se pulsa el boton añadir añadimos una vez el producto en la cesta con la cantidad indicada en el select;
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if ($_POST["action"] == "Añadir") {
-                    $usuario = $_SESSION["usuario"];
-                    $idProducto = $_POST["idProducto"];
-                    $unidades = $_POST["unidades"];
-                    $stock = $_POST["stockProducto"];
-                    //sacamos el id de la cesta del usuario en sesion
-                    $sqlCesta = "SELECT * FROM Cestas where usuario= '$usuario'";
-                    $idCestaUsuario = $conexion->query($sqlCesta)->fetch_assoc()["idCesta"];
-                    //comprobamos que en la base de datos no haya ese producto ya en esa cesta
-                    $res = $conexion->query("SELECT * FROM productoscestas");
-                    $existe = false;
-                    while ($fila = $res->fetch_assoc()) {
-                        //en caso de encontrarlo existe pasa a ser true y no lo añadimos a la bdd si no lo sumamos a la cantidad
-                        if ($fila["idCesta"] == $idCestaUsuario && $fila["idProducto"] == $idProducto) {
-                            if ($stock > 0) {
-                                $cantidadCesta = $fila["cantidad"] + $unidades;
-                                echo "<p>$cantidadCesta</p>";
-                                $conexion->query("UPDATE productoscestas SET cantidad = '$cantidadCesta' WHERE (idProducto = '$idProducto') and (idCesta = '$idCestaUsuario');");
-                                $cantidadStock = $stock - $unidades;
-                                $conexion->query("UPDATE productos SET cantidad = '$cantidadStock' WHERE (idProducto = '$idProducto');");
-                                //levantamos flag
-                                $existe = true;
-                            }
-        ?>
-                    <div class="alert alert-warning container">Cantidad modificada en el carrito</div>
-                <?php
-                        }
-                    }
-                    //si no existe el producto en la cesta, en la tabla productosCestas introducimos los valores de idProducto e idCesta y la cantidad a añadir.
-                    if (!$existe) {
-                        if ($stock > 0) {
-                            $sqlProductoCesta = "INSERT INTO productoscestas (idProducto , idCesta, cantidad) values ('$idProducto' , '$idCestaUsuario', '$unidades')";
-                            $conexion->query($sqlProductoCesta);
-                            //le restamos al stock las unidades al añadirlo a cesta
-                            $cantidadStock = $stock - $unidades;
-                            $conexion->query("UPDATE productos SET cantidad = '$cantidadStock' WHERE (idProducto = '$idProducto');");
-                            //seteamos el total de la cesta
-
-
-                ?>
-                    <div class="alert alert-success container">Producto introducido en la cesta</div>
     <?php
-                        }
-                    }
-                }
             }
     ?>
     </main>

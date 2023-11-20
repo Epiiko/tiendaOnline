@@ -20,6 +20,13 @@ if ($_SESSION["usuario"] == "invitado") {
 </head>
 
 <body>
+
+    <?php
+    //traemos las variables que nos van a hacer falta de tablas distintas 
+    $idCestaUsuario = $conexion->query("SELECT * FROM Cestas where usuario= '$usuario'")->fetch_assoc()["idCesta"];
+    $totalCesta = $conexion->query("SELECT * FROM cestas where idCesta = '$idCestaUsuario'")->fetch_assoc()["precioTotal"];
+
+    ?>
     <video src="imgs/fondo.mp4" autoplay loop muted></video>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -33,6 +40,47 @@ if ($_SESSION["usuario"] == "invitado") {
     <main>
         <div class="container divTablas">
             <h1 class="mt-5" align="center">Cesta de <?php echo $usuario ?></h1>
+
+            <?php
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                if ($_POST["action"] == "finalizar") {
+                    //traemos el total de la cesta de la tabla para crear el pedido  
+                    $totalCesta = $conexion->query("SELECT * FROM cestas where idCesta = '$idCestaUsuario'")->fetch_assoc()["precioTotal"];
+                    //solo permitimos crear un pedido si la cesta esta con productos
+                    if ($totalCesta != "0.00") {
+                        //generamos un pedido (el que hemos creado con este usuario)
+                        $conexion->query("INSERT INTO pedidos (usuario, precioTotal) VALUES ('$usuario','$totalCesta');");
+                        //borrar todos los productos e insertarlo antes en linea de pedido
+                        while ($fila = $conexion->query("SELECT * FROM productoscestas WHERE idCesta='$idCestaUsuario';")->fetch_assoc()) {
+                            $idProducto = $fila["idProducto"];
+                            //sacamos los valores que necesitamos para linea pedidos con el id del producto que estamos fetcheando
+                            $producto = $conexion->query("SELECT * FROM productos WHERE idProducto = '$idProducto'")->fetch_assoc();
+                            $precioProducto = $producto["precio"];
+                            $cantidadProducto = $producto["cantidad"];
+                            //sacamos el id del ultimo pedido 
+                            $idUltimoPedido = $conexion->query("SELECT * FROM pedidos WHERE usuario = '$usuario' ORDER BY idPedido DESC LIMIT 1")->fetch_assoc()["idPedido"];
+                            //introducimos en linea pedido cada producto antes de borrarlo
+                            $conexion->query("INSERT INTO lineaspedidos (idProducto, idPedido,  precioUnitario) VALUES ('$idProducto',' $idUltimoPedido' , '$precioProducto')");
+                            //borramos el producto de la tabla productoscestas
+                            $conexion->query("DELETE FROM productoscestas where (idCesta='$idCestaUsuario' and idProducto='$idProducto')");
+                        }
+                        //seteamos el total de la cesta a 0
+                        $conexion->query("UPDATE cestas SET precioTotal = '0.00' WHERE (usuario = '$usuario');");
+
+            ?>
+                        <br><br><br>
+                        <div class="alert alert-success container">Pedido creado</div>
+                    <?php
+                    } else {
+
+                    ?>
+                        <br><br><br>
+                        <div class="alert alert-danger container">Debe añadir algo a la cesta</div>
+            <?php
+                    }
+                }
+            }
+            ?>
             <table class="table table-dark table-hover mt-5">
                 <thead>
                     <tr>
@@ -44,14 +92,11 @@ if ($_SESSION["usuario"] == "invitado") {
                 </thead>
                 <tbody>
                     <?php
-
                     //primero sacamos el id de la cesta del usuario
                     $sqlCesta = "SELECT * FROM Cestas where usuario= '$usuario'";
                     $idCestaUsuario = $conexion->query($sqlCesta)->fetch_assoc()["idCesta"];
                     //miramos que productos estan en su cesta y que cantidad hay
                     $resCestasUsuarios = $conexion->query("SELECT * FROM productoscestas WHERE idCesta='$idCestaUsuario'");
-                    //creamos un sumatorio para sacar el total
-                    $total = 0;
                     //recorremos en busca de cada producto con el id de cesta de nuestro usuario y almacenamos el producto y la cantidad
                     while ($cestaUsuario = $resCestasUsuarios->fetch_assoc()) {
                         $idProducto = $cestaUsuario["idProducto"];
@@ -63,7 +108,6 @@ if ($_SESSION["usuario"] == "invitado") {
                             while ($resProducto = $resProductos->fetch_assoc()) {
                                 //si hay fila creamos un objeto producto para poder mostrar lo que nos interesa
                                 $producto = new Producto($resProducto["idProducto"], $resProducto["nombreProductos"], $resProducto["precio"], $resProducto["descripcion"], $resProducto["cantidad"], $resProducto["imagen"]);
-                                $total += $producto->precio * $cantidadProducto;
                     ?>
                                 <tr>
                                     <td><?php echo $producto->nombreproductos ?></td>
@@ -78,8 +122,19 @@ if ($_SESSION["usuario"] == "invitado") {
                     ?>
                 </tbody>
             </table>
-            <h5 class="bg-dark border p-3" style="width: 21%;"><?php echo "Total de la cesta: " . $total . " €" ?></h5>
+            <?php
+            $totalCesta = $conexion->query("SELECT * FROM cestas where idCesta = '$idCestaUsuario'")->fetch_assoc()["precioTotal"];
+            ?>
+            <h5 class="bg-dark border p-3"><?php echo "Total de la cesta: " . $totalCesta . " €" ?></h5>
+            <div class="float-end">
+                <form action="" method="POST" class="form-group">
+                    <input type="submit" value="finalizar" class="btn btn-info color-dark">
+                    <input type="hidden" name="action" value="finalizar">
+                </form>
+            </div>
         </div>
+
+
     </main>
 </body>
 
