@@ -1,31 +1,65 @@
-body{
+body {
     background-image: url(../imgs/fondo.mp4);
+    color: white;
 }
-video{
-   position: fixed;
-   min-width: 100%;
-   min-height: 100%;
-   top: 50%;
-   left: 50%;
-   transform: translateY(-50%) translateX(-50%);
-   z-index: -100;
+
+video {
+    position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: -100;
 }
-table{
+
+table {
     text-align: center;
 }
-td{
+
+td {
     vertical-align: middle;
 }
-select{
+
+select {
     font-weight: bold;
     font-size: 1rem;
 }
-.bienvenidaInvitado{
+
+.bienvenidaInvitado {
     color: white;
 }
-h1{
+
+h1 {
     color: white;
 }
-.registroUsuario{
-    color: white !important;
+
+.registroUsuario {
+    color: rgb(0, 0, 0);
+    background-color: rgba(255, 255, 255, 0.57);
+    width: 50%;
+    margin: auto;
+    padding: 1%;
+    font-family: Monaco, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    border: solid black 3px;
+    box-shadow: 0px 0px 10px rgba(255, 217, 0, 0.646);
+}
+
+.registroUsuario input {
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 3%;
+    font-size: 1.5rem;
+}
+
+legend {
+    text-align: center;
+    margin-bottom: 1%;
+    font-size: 3rem;
+    margin-bottom: 10%;
+    color: black;
+    font-weight: bold;
+    
 }

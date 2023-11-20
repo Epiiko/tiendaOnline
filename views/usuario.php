@@ -14,7 +14,7 @@
 <body>
     <video src="imgs/fondo.mp4" autoplay loop muted></video>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -48,7 +48,7 @@
                 $err_contrasena = "La contraseña es obligatoria";
             } else {
                 if (strlen($temp_contrasena) < 8 || strlen($temp_contrasena) > 20) {
-                    $err_contrasena ="La contraseña debe tener mas de 8 y menos de 20 caracteres";
+                    $err_contrasena = "La contraseña debe tener mas de 8 y menos de 20 caracteres";
                 } else {
                     if (!preg_match($patternContrasena, $temp_contrasena)) {
                         $err_contrasena = "La contraseña debe contenermínimo un carácter en minúscula, uno en mayúscula, un número y un carácter especial";
@@ -126,7 +126,7 @@
                 ?>
                 <br><br>
                 <input type="hidden" name="action" value="usuarios">
-                <input type="submit" value="Usuarios">
+                <input type="submit" value="Registrarse" class="btn btn-success">
             </form>
         </fieldset>
     </div>

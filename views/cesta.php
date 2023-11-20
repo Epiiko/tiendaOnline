@@ -29,7 +29,7 @@ if ($_SESSION["usuario"] == "invitado") {
     ?>
     <video src="imgs/fondo.mp4" autoplay loop muted></video>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
             <a class="nav-item nav-link" href="logOut.php">LogOut</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

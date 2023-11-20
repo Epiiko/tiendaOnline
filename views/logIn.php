@@ -13,7 +13,7 @@
 <body>
     <video src="imgs/fondo.mp4" autoplay loop muted></video>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -35,11 +35,11 @@
         //buscamos al usuario con su nombre si devuelve 0 es false y si no entra en el if
         if ($res->num_rows === 0) {
             //si no encuentra res
-    ?>      
-    <div class="container mt-4">
-        <div class="container mt-4 alert alert-warning">No existe el usuario</div>
-    </div>
-            
+    ?>
+            <div class="container mt-4">
+                <div class="container mt-4 alert alert-warning">No existe el usuario</div>
+            </div>
+
             <?php
         } else {
             //recorremos todas las filas si encuentra con fetch_assoc()
@@ -59,15 +59,15 @@
             } else {
                 //si no coinciden las pass damos la notificacion
             ?>
-             <div class="container mt-4">
-                <div class="alert alert-danger">No coinciden las contraseñas</div>
-            </div>
+                <div class="container mt-4">
+                    <div class="alert alert-danger">No coinciden las contraseñas</div>
+                </div>
     <?php
             }
         }
     }
     ?>
-    <div class="container">
+    <div class="container registroUsuario mt-5">
         <h1>LogIn</h1>
         <form action="" method="post">
             <div class="mb-3">
