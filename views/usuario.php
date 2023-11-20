@@ -73,6 +73,8 @@
                 }
             }
             //----------------------------Si todo ok a bdd-------------------------------------------
+
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PROBLEMAS AQUI SOLUCIONAR SI O SI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
                 $repetido = false;
