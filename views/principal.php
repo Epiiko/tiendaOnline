@@ -25,6 +25,9 @@
                 <div class="navbar-nav">
                     <?php
                     session_start();
+                    if(!isset ($_SESSION["usuario"])){
+                        $_SESSION["usuario"]="invitado";
+                    }
                     $usuario = $_SESSION["usuario"];
                     ?>
                     <a class="nav-item nav-link" href="#">Bienvenid@ <?php echo $usuario ?> </a>
