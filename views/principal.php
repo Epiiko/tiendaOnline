@@ -27,7 +27,7 @@
                     session_start();
                     $usuario = $_SESSION["usuario"];
                     ?>
-                    <a class="nav-item nav-link" href="#">Bienvenid@ <?php echo $usuario ?></a>
+                    <a class="nav-item nav-link" href="#">Bienvenid@ <?php echo $usuario ?>         </a>
                     <?php
 
                     //comprobamos si usuario esta vacio si es asi lo iniciamos como invitado

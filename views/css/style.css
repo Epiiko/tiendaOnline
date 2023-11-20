@@ -29,3 +29,8 @@ h1{
 .registroUsuario{
     color: white !important;
 }
+a{
+    text-decoration: none;
+    color: white;
+    float: right;
+}

@@ -39,7 +39,7 @@ if ($_SESSION["usuario"] == "invitado") {
     </header>
     <main>
         <div class="container divTablas">
-            <h1 class="mt-5" align="center">Cesta de <?php echo $usuario ?></h1>
+            <h1 class="mt-5" align="center" id="inicio">Cesta de <?php echo $usuario ?></h1>
 
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -56,11 +56,12 @@ if ($_SESSION["usuario"] == "invitado") {
                             //sacamos los valores que necesitamos para linea pedidos con el id del producto que estamos fetcheando
                             $producto = $conexion->query("SELECT * FROM productos WHERE idProducto = '$idProducto'")->fetch_assoc();
                             $precioProducto = $producto["precio"];
-                            $cantidadProducto = $producto["cantidad"];
+                            $productoCesta = $conexion->query("SELECT * FROM productoscestas WHERE idProducto = '$idProducto'")->fetch_assoc();
+                            $unidades = $productoCesta["cantidad"];
                             //sacamos el id del ultimo pedido 
                             $idUltimoPedido = $conexion->query("SELECT * FROM pedidos WHERE usuario = '$usuario' ORDER BY idPedido DESC LIMIT 1")->fetch_assoc()["idPedido"];
                             //introducimos en linea pedido cada producto antes de borrarlo
-                            $conexion->query("INSERT INTO lineaspedidos (idProducto, idPedido,  precioUnitario) VALUES ('$idProducto',' $idUltimoPedido' , '$precioProducto')");
+                            $conexion->query("INSERT INTO lineaspedidos (idProducto, idPedido,  precioUnitario, cantidad) VALUES ('$idProducto',' $idUltimoPedido' , '$precioProducto', '$unidades')");
                             //borramos el producto de la tabla productoscestas
                             $conexion->query("DELETE FROM productoscestas where (idCesta='$idCestaUsuario' and idProducto='$idProducto')");
                         }
