@@ -50,8 +50,11 @@ if ($_SESSION["usuario"] == "invitado") {
                     if ($totalCesta != "0.00") {
                         //generamos un pedido (el que hemos creado con este usuario)
                         $conexion->query("INSERT INTO pedidos (usuario, precioTotal) VALUES ('$usuario','$totalCesta');");
-                        //borrar todos los productos e insertarlo antes en linea de pedido
+                        //borrar todos los productos e insertarlo antes en linea de pedido y crear un contador
+                        $contador=0;
                         while ($fila = $conexion->query("SELECT * FROM productoscestas WHERE idCesta='$idCestaUsuario';")->fetch_assoc()) {
+                            //aumentamos el contador para la linea de pedido
+                            $contador++;
                             $idProducto = $fila["idProducto"];
                             //sacamos los valores que necesitamos para linea pedidos con el id del producto que estamos fetcheando
                             $producto = $conexion->query("SELECT * FROM productos WHERE idProducto = '$idProducto'")->fetch_assoc();
@@ -61,7 +64,7 @@ if ($_SESSION["usuario"] == "invitado") {
                             //sacamos el id del ultimo pedido 
                             $idUltimoPedido = $conexion->query("SELECT * FROM pedidos WHERE usuario = '$usuario' ORDER BY idPedido DESC LIMIT 1")->fetch_assoc()["idPedido"];
                             //introducimos en linea pedido cada producto antes de borrarlo
-                            $conexion->query("INSERT INTO lineaspedidos (idProducto, idPedido,  precioUnitario, cantidad) VALUES ('$idProducto',' $idUltimoPedido' , '$precioProducto', '$unidades')");
+                            $conexion->query("INSERT INTO lineaspedidos (lineaPedido, idProducto, idPedido,  precioUnitario, cantidad) VALUES ('$contador','$idProducto',' $idUltimoPedido' , '$precioProducto', '$unidades')");
                             //borramos el producto de la tabla productoscestas
                             $conexion->query("DELETE FROM productoscestas where (idCesta='$idCestaUsuario' and idProducto='$idProducto')");
                         }

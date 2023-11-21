@@ -1,6 +1,4 @@
-body {
-   
-}
+
 
 video {
     position: fixed;
@@ -113,9 +111,6 @@ td{
     color: black !important;
     font-weight: bold;
     padding: 10%;
-}
-.divTablas{
-    /* background-color: rgba(245, 245, 245, 0.508); */
 }
 .divTablas h1{
     font-family:Haettenschweiler, 'Arial Narrow Bold', sans-serif;

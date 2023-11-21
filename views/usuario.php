@@ -77,22 +77,17 @@
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PROBLEMAS AQUI SOLUCIONAR SI O SI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
-                $repetido = false;
-                while ($usuarios = $conexion->query("SELECT * FROM usuarios")->fetch_assoc()) {
-                    if ($usuarios["usuario"] == $usuario) {
-                        $repetido = true;
-                    }
-                }
-                if (!$repetido) {
+                $sql3 = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario = '$usuario'");
+                if (mysqli_num_rows($sql3) > 0) {
+    ?>
+                    <div class="alert alert-danger container">El nombre de usuario ya ha sido escogido</div>
+    <?php
+                } else {
                     $sql = "INSERT INTO usuarios (usuario,contrasena,fechaNacimiento) VALUES ('$usuario','$contrasena', '$fecha_nacimiento')";
                     $sql2 = "INSERT INTO cestas (usuario, precioTotal) VALUES ('$usuario', 0)";
                     $conexion->query($sql);
                     $conexion->query($sql2);
                     header("Location: logIn.php");
-                } else {
-    ?>
-                    <div class="alert alert-danger container">El nombre de usuario ya ha sido escogido</div>
-    <?php
                 }
             }
         }
@@ -134,7 +129,7 @@
     </div>
 </body>
 <footer>
-     <h1 class="mt-3 titulo"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
+    <h1 class="mt-3 titulo"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
 </footer>
 
 </html>
