@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Principal</title>
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <?php require '../util/base_de_datos.php';
     require '../util/productoObj.php'; ?>
-    <link rel="stylesheet" href="css/style.css">
+
 
 </head>
 
@@ -25,8 +26,8 @@
                 <div class="navbar-nav">
                     <?php
                     session_start();
-                    if(!isset ($_SESSION["usuario"])){
-                        $_SESSION["usuario"]="invitado";
+                    if (!isset($_SESSION["usuario"])) {
+                        $_SESSION["usuario"] = "invitado";
                     }
                     $usuario = $_SESSION["usuario"];
                     ?>
@@ -63,9 +64,7 @@
         </nav>
     </header>
     <main>
-        <div class="container" align="center">
-            <h1 class="mt-3"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
-        </div>
+
         <?php
         //si se pulsa el boton añadir añadimos una vez el producto en la cesta con la cantidad indicada en el select;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -150,8 +149,8 @@
         <div class="container mt-5 divTablas">
             <?php if ($usuario != "invitado") {
             ?>
-                <h1 align="center">Tabla productos</h1>
-                <table class="table table-hover table-dark ">
+                <h1>Ofertas de esta semana</h1>
+                <table class="table table-hover table-dark mt-5 ">
 
                     <thead>
                         <tr>
@@ -192,11 +191,18 @@
 
                                         <select name="unidades" id="" max=5>
                                             <?php
-                                            for ($i = 1; $i <= intval($producto->cantidad) && $i <= 5; $i++) {
+                                            if ($producto->cantidad == 0) {
+                                                ?>
+                                                    <option value="">0</option>
+                                                <?php
+                                            } else {
+                                                for ($i = 1; $i <= intval($producto->cantidad) && $i <= 5; $i++) {
                                             ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                             <?php
+                                                }
                                             }
+
                                             ?>
                                         </select>
                                     </form>
@@ -209,20 +215,25 @@
                         <?php } ?>
                     </tbody>
                 </table>
+                <br>
         </div>
     <?php
 
             } else {
     ?>
         <div class="container bienvenidaInvitado" align="center">
-            <h1>Bienvenido a <img src="imgs/logo.png" alt="" height="50px">Good4Game</h1>
+            <h1 id="msjBienvenida">Bienvenido a <img src="imgs/logo.png" alt="" height="50px">Good4Game</h1>
             <p>Para poder disfrutar de nuestra variedad de productos y servicios debe de ser usuario registrado de nuestra pagina</p>
             <p>puede o bien <a href="usuario.php">registrarse</a> o bien <a href="logIn.php">iniciar sesion</a> como usuario de nuestra web</p>
         </div>
     <?php
             }
     ?>
+
     </main>
 </body>
+<footer>
+    <h1 class="mt-3 titulo"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
+</footer>
 
 </html>

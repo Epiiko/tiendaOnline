@@ -18,7 +18,6 @@
     session_start();
     if ($_SESSION["rol"] != "admin") {
         header("Location: principal.php");
-    } else {
     }
     ?>
     <header>
@@ -134,8 +133,8 @@
     }
     ?>
     <!----------------------------Formulario Producto------------------------->
-    <div class="form-group">
-        <fieldset class="container form-group">
+    <div class="form-group  mt-5">
+        <fieldset id="registroProducto" class="container form-group">
             <legend>Productos</legend>
             <form action="" method="POST" class="form-group" enctype="multipart/form-data">
                 <label for="name">Nombre</label>
@@ -182,7 +181,7 @@
                 ?>
                 <br><br>
                 <input type="hidden" name="action" value="productos">
-                <input type="submit" value="Productos">
+                <input type="submit" value="Añadir el producto">
                 <?php
                 if (isset($enviado)) echo $enviado;
                 ?>
@@ -191,5 +190,8 @@
     </div>
 
 </body>
+<footer>
+     <h1 class="mt-3 titulo"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
+</footer>
 
 </html>

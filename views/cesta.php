@@ -126,10 +126,10 @@ if ($_SESSION["usuario"] == "invitado") {
             <?php
             $totalCesta = $conexion->query("SELECT * FROM cestas where idCesta = '$idCestaUsuario'")->fetch_assoc()["precioTotal"];
             ?>
-            <h5 class="bg-dark border p-3"><?php echo "Total de la cesta: " . $totalCesta . " €" ?></h5>
-            <div class="float-end">
+            <div class="totalCesta">
+                <h5 class="resultado"><?php echo "Total de la cesta: " . $totalCesta . " €" ?></h5>
                 <form action="" method="POST" class="form-group">
-                    <input type="submit" value="finalizar" class="btn btn-info color-dark">
+                    <input type="submit" value="Realizar pedido" class="btn btn-info finalizar">
                     <input type="hidden" name="action" value="finalizar">
                 </form>
             </div>
@@ -138,5 +138,8 @@ if ($_SESSION["usuario"] == "invitado") {
 
     </main>
 </body>
+<footer>
+    <h1 class="mt-3 titulo"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
+</footer>
 
 </html>

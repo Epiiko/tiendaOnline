@@ -133,5 +133,8 @@
         </fieldset>
     </div>
 </body>
+<footer>
+     <h1 class="mt-3 titulo"><img src="imgs/logo.png" alt="" height="70px">Good4Game</h1>
+</footer>
 
 </html>
