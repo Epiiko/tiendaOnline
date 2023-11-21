@@ -16,4 +16,4 @@ CREATE TABLE productosCestas( idProducto INTEGER(8), idCesta INTEGER(8), cantida
 
 CREATE TABLE pedidos( idPedido INTEGER(8) PRIMARY KEY AUTO_INCREMENT, usuario VARCHAR(12) NOT NULL, precioTotal NUMERIC(7, 2) NOT NULL, fechaPedido DATE NOT NULL, FOREIGN KEY (usuario) REFERENCES usuarios (usuario) );
 
-CREATE TABLE lineasPedidos( lineaPedido NUMERIC(2) NOT NULL, idProducto INTEGER(8) NOT NULL, idPedido INTEGER(8) NOT NULL, precioUnitario NUMERIC(7,2) NOT NULL, cantidad NUMERIC(2,0) NOT NULL, FOREIGN KEY (idPedido) REFERENCES pedidos(idPedido), FOREIGN KEY (idProducto) REFERENCES productos(idProducto) );
+CREATE TABLE lineasPedidos( lineaPedido NUMERIC(2) NOT NULL, idProducto INTEGER(8) NOT NULL, idPedido INTEGER(8) NOT NULL, precioUnitario NUMERIC(7,2) NOT NULL, cantidad NUMERIC(2,0) NOT NULL, FOREIGN KEY (idPedido) REFERENCES pedidos(idPedido), FOREIGN KEY (idProducto) REFERENCES productos(idProducto));

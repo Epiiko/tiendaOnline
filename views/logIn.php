@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <video src="imgs/fondo.mp4" autoplay loop muted></video>
+    <video src="imgs/fondo.mp4" autoplay muted></video>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>

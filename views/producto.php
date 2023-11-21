@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <video src="imgs/fondo.mp4" autoplay loop muted></video>
+    <video src="imgs/fondo.mp4" autoplay muted></video>
     <?php
     session_start();
     if ($_SESSION["rol"] != "admin") {

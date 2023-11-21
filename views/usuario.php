@@ -12,13 +12,11 @@
 </head>
 
 <body>
-    <video src="imgs/fondo.mp4" autoplay loop muted></video>
+    <video src="imgs/fondo.mp4" autoplay muted></video>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a  class="navbar-brand" href="logIn.php">Iniciar sesion</a>
         </nav>
     </header>
     <?php
@@ -73,8 +71,6 @@
                 }
             }
             //----------------------------Si todo ok a bdd-------------------------------------------
-
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PROBLEMAS AQUI SOLUCIONAR SI O SI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if (isset($usuario) && isset($contrasena) && isset($fecha_nacimiento)) {
                 require '../util/base_de_datos.php';
                 $sql3 = mysqli_query($conexion, "SELECT * FROM usuarios WHERE usuario = '$usuario'");

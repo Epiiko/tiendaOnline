@@ -15,50 +15,52 @@
 </head>
 
 <body class="responsive">
-    <video src="imgs/fondo.mp4" autoplay loop muted></video>
+    <video src="imgs/fondo.mp4" autoplay muted></video>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <?php
-                    session_start();
-                    if (!isset($_SESSION["usuario"])) {
-                        $_SESSION["usuario"] = "invitado";
-                    }
-                    $usuario = $_SESSION["usuario"];
-                    ?>
-                    <a class="nav-item nav-link" href="#">Bienvenid@ <?php echo $usuario ?> </a>
-                    <?php
-
-                    //comprobamos si usuario esta vacio si es asi lo iniciamos como invitado
-                    if ($_SESSION["usuario"] == '') {
-                        $_SESSION["usuario"] = "invitado";
-                        $_SESSION["rol"] = "cliente";
-                    }
-                    //si es invitado solo se muestra el primer bloque del if
-                    if ($_SESSION["usuario"] == "invitado") {
-                    ?>
-
-                        <a class="nav-item nav-link" href="usuario.php">Registrarse</a>
-                        <a class="nav-item nav-link active" href="logIn.php">LogIn</a>
-
-                    <?php
-                    } else {
-                    ?>
-                        <a class="nav-item nav-link" href="cesta.php">Cesta</a>
+            <div class="container-fluid">
+                <a class="navbar-brand" href="principal.php"><img src="imgs/logo.png" alt="" height="40px">Good4Game</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
                         <?php
-                        //si no es cliente y es admin muestra mas cosas
-                        if ($_SESSION["rol"] == "admin") { ?>
-                            <a class="nav-item nav-link" href="producto.php">Añadir producto</a>
-                        <?php } ?>
-                        <a class="nav-item nav-link" href="logOut.php">LogOut</a>
-                    <?php
-                    }
-                    ?>
+                        session_start();
+                        if (!isset($_SESSION["usuario"])) {
+                            $_SESSION["usuario"] = "invitado";
+                        }
+                        $usuario = $_SESSION["usuario"];
+                        ?>
+                        <a class="nav-item nav-link" href="#">Bienvenid@ <?php echo $usuario ?> </a>
+                        <?php
+
+                        //comprobamos si usuario esta vacio si es asi lo iniciamos como invitado
+                        if ($_SESSION["usuario"] == '') {
+                            $_SESSION["usuario"] = "invitado";
+                            $_SESSION["rol"] = "cliente";
+                        }
+                        //si es invitado solo se muestra el primer bloque del if
+                        if ($_SESSION["usuario"] == "invitado") {
+                        ?>
+
+                            <a class="nav-item nav-link" href="usuario.php">Registrarse</a>
+                            <a class="nav-item nav-link active" href="logIn.php">LogIn</a>
+
+                        <?php
+                        } else {
+                        ?>
+                            <a class="nav-item nav-link" href="cesta.php">Cesta</a>
+                            <?php
+                            //si no es cliente y es admin muestra mas cosas
+                            if ($_SESSION["rol"] == "admin") { ?>
+                                <a class="nav-item nav-link" href="producto.php">Añadir producto</a>
+                            <?php } ?>
+                            <a class="nav-item nav-link" href="logOut.php">LogOut</a>
+                        <?php
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -192,12 +194,12 @@
                                         <select name="unidades" id="" max=5>
                                             <?php
                                             if ($producto->cantidad == 0) {
-                                                ?>
-                                                    <option value="">0</option>
+                                            ?>
+                                                <option value="">0</option>
                                                 <?php
                                             } else {
                                                 for ($i = 1; $i <= intval($producto->cantidad) && $i <= 5; $i++) {
-                                            ?>
+                                                ?>
                                                     <option value="<?php echo $i ?>"><?php echo $i ?></option>
                                             <?php
                                                 }
